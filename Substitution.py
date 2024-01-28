@@ -64,23 +64,3 @@ def AffineRecDecode(alphabet, message, keyA1, keyA2, keyB1, keyB2):
         code += alphabet[x]
 
     return code
-
-alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-msg = 'CRYPTOGRAPHY'
-
-keySimple = 'PASWORDBCEFGHIJKMNQLUVTXYZ'
-encoded = Simple(alphabet, msg, keySimple)
-decoded = SimpleDecode(alphabet, encoded, keySimple)
-print(encoded, decoded)
-
-keyA = 3
-keyB = 10
-encodedAf = Affine(alphabet, msg, keyA, keyB)
-decodedAf = AffineDecode(alphabet, encodedAf, keyA, keyB)
-print(encodedAf, decodedAf)
-
-keyA2 = 5
-keyB2 = 4
-encodedAfRec = AffineRec(alphabet, msg, keyA, keyA2, keyB, keyB2)
-decodedAfRec = AffineRecDecode(alphabet, encodedAfRec, keyA, keyA2, keyB, keyB2)
-print(encodedAfRec, decodedAfRec)
