@@ -18,7 +18,7 @@ def Validate(message, alphabet):
 
 def ValidateMatrix(alphabet, matrix):
     m = len(alphabet)
-    det = int(np.linalg.det(matrix))
+    det = int(np.round(np.linalg.det(matrix)))
     gcd = np.gcd(m, det)
     return gcd == 1
 
@@ -60,6 +60,7 @@ msg = '''Please choose the operation:
 6: Recurrent Affine encode
 7: Recurrent Affine decode
 8: Hill encode
+9: Hill decode
 '''
 
 
@@ -97,7 +98,9 @@ if __name__ == '__main__':
             case 8:
                 key = CreateKeyMatrix(alphabet)
                 print(Hill.HillEncode(alphabet, val, key))
-                
+            case 9:
+                key = CreateKeyMatrix(alphabet)
+                print(Hill.HillDecode(alphabet, val, key))
 
         message = input('Please enter the message: ')
         val = Validate(message, alphabet)

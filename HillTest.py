@@ -19,5 +19,13 @@ class TestHillEncode(unittest.TestCase):
         expected_output = "AQCHUX"
         self.assertEqual(Hill.HillEncode(alphabet, message, key), expected_output)
 
+    def test_HillDecode(self):
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        message = "HELLO"
+        key = np.array([[1, 4], [3, 7]])
+        encoded = Hill.HillEncode(alphabet, message, key)
+        decoded = Hill.HillDecode(alphabet, encoded, key)
+        self.assertEqual(decoded[:5], message)
+
 if __name__ == "__main__":
     unittest.main()
