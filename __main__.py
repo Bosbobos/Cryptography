@@ -1,27 +1,6 @@
 import numpy as np
 import Substitution
-import Hill
-
-def Validate(message, alphabet):
-    if alphabet == alphabet.lower():
-        msg = message.lower()
-    elif alphabet == alphabet.upper():
-        msg = message.upper()
-    else:
-        msg = message
-    extra = [x for x in set(msg) if x not in alphabet]
-    for x in extra:
-        msg = msg.replace(x, '')
-
-    return msg
-
-
-def ValidateMatrix(alphabet, matrix):
-    m = len(alphabet)
-    det = int(np.round(np.linalg.det(matrix)))
-    gcd = np.gcd(m, det)
-    return gcd == 1
-
+import Hill, Validator
 
 def CreateKeyMatrix(alphabet):
     n = int(input('Number of key\'s rows: '))
@@ -32,7 +11,7 @@ def CreateKeyMatrix(alphabet):
         inputStrings.append(row)
     arr = list([int(x) for x in row.split()] for row in inputStrings)
     key = np.array(arr)
-    if not ValidateMatrix(alphabet, key):
+    if not Validator.ValidateMatrix(alphabet, key):
         raise Exception('Key matrix\'s determinant should be coprime with the alphabet\'s power.')
 
     return key
@@ -61,13 +40,15 @@ msg = '''Please choose the operation:
 7: Recurrent Affine decode
 8: Hill encode
 9: Hill decode
+10: Recurrent Hill encode
+11: Recurrent Hill decode
 '''
 
 
 if __name__ == '__main__':
     alphabet = EnterAlphabet()
     message = input('Please enter the message: ')
-    val = Validate(message, alphabet)
+    val = Validator.Validate(message, alphabet)
     func = int(input(msg))
     while(func != 0):
         match func:
@@ -101,7 +82,19 @@ if __name__ == '__main__':
             case 9:
                 key = CreateKeyMatrix(alphabet)
                 print(Hill.HillDecode(alphabet, val, key))
+            case 10:
+                key1 = CreateKeyMatrix(alphabet)
+                key2 = CreateKeyMatrix(alphabet)
+                if not Validator.ValidateMatrixesDimensions(key1, key2):
+                    raise Exception('Key\'s dimensions should be the same')
+                print(Hill.RecHillEncode(alphabet, val, key1, key2))
+            case 11:
+                key1 = CreateKeyMatrix(alphabet)
+                key2 = CreateKeyMatrix(alphabet)
+                if not Validator.ValidateMatrixesDimensions(key1, key2):
+                    raise Exception('Key\'s dimensions should be the same')                
+                print(Hill.RecHillDecode(alphabet, val, key1, key2))
 
         message = input('Please enter the message: ')
-        val = Validate(message, alphabet)
+        val = Validator.Validate(message, alphabet)
         func = int(input('Operation: '))

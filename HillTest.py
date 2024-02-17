@@ -27,5 +27,22 @@ class TestHillEncode(unittest.TestCase):
         decoded = Hill.HillDecode(alphabet, encoded, key)
         self.assertEqual(decoded[:5], message)
 
+    def test_RecHillEncode(self):
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        message = "HELLO"
+        key1 = np.array([[1, 4], [3, 7]])
+        key2 = np.array([[2, 5], [7, 3]])
+        encoded = Hill.RecHillEncode(alphabet, message, key1, key2)
+        self.assertEqual(encoded, "XXZGNG")
+
+    def test_RecHillDecode(self):
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        message = "HELLO"
+        key1 = np.array([[1, 4], [3, 7]])
+        key2 = np.array([[2, 5], [7, 3]])
+        encoded = Hill.RecHillEncode(alphabet, message, key1, key2)
+        decoded = Hill.RecHillDecode(alphabet, encoded, key1, key2)
+        self.assertEqual(decoded[:5], message)
+
 if __name__ == "__main__":
     unittest.main()
