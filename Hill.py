@@ -39,7 +39,7 @@ def RecHillEncode(alphabet, message, key1, key2):
     blocksNum = len(message) // blockLen
     keys = [key1, key2]
     for i in range(2, blocksNum):
-        keyN = np.matmul(keys[i-2], keys[i-1]) % 26
+        keyN = np.matmul(keys[i-2], keys[i-1]) % len(alphabet)
         keys.append(keyN)
     
     code = ''
@@ -57,7 +57,7 @@ def RecHillDecode(alphabet, message, key1, key2):
     blocksNum = len(message) // blockLen
     keys = [_matrixModInv(key1, m), _matrixModInv(key2, m)]
     for i in range(2, blocksNum):
-        keyN = np.matmul(keys[i-1], keys[i-2]) % 26
+        keyN = np.matmul(keys[i-1], keys[i-2]) % m
         keys.append(keyN)
     
     code = ''
