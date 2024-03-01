@@ -65,7 +65,7 @@ def AffineRecDecode(alphabet, message, keyA1, keyA2, keyB1, keyB2):
 
     return code
 
-def Vigenere(alphabet, message, key):
+def VigenereEncode(alphabet, message, key):
     m = len(alphabet)
 
     code = ''
@@ -77,28 +77,63 @@ def Vigenere(alphabet, message, key):
 
     return code
 
-def RepeatKeyVigenere(alphabet, message, key):
+def _invertKey(alphabet, key):
+    m = len(alphabet)
+
+    inverted = ''
+    for i in range(len(key)):
+        k = alphabet.index(key[i])
+        inverted += alphabet[(-k)%m]
+
+    return inverted
+
+def RepeatKeyVigenereEncode(alphabet, message, key):
     n = int(len(message) / len(key)) + (len(message) % len(key) > 0) # ceil without importing math
     repeated = key * n
     newKey = repeated[:len(message)]
 
-    return Vigenere(alphabet, message, newKey)
+    return VigenereEncode(alphabet, message, newKey)
 
-def KeyByTextVigenere(alphabet, message, key):
+def RepeatKeyVigenereDecode(alphabet, message, key):
+    invertedKey = _invertKey(alphabet, key)
+    
+    return RepeatKeyVigenereEncode(alphabet, message, invertedKey)
+
+def KeyByTextVigenereEncode(alphabet, message, key):
     delta = len(message) - len(key)
     newKey = key + message[:delta]
 
-    return Vigenere(alphabet, message, newKey)
+    return VigenereEncode(alphabet, message, newKey)
 
-def KeyByCipertextVigenere(alphabet, message, key):
+def KeyByTextVigenereDecode(alphabet, message, key):
     m = len(alphabet)
 
     code = ''
     for i in range(len(message)):
-        kLetter = key[i] if len(key) > i else code[i-1]
+        kLetter = key[i] if len(key) > i else code[i - len(key)]
+        k = alphabet.index(kLetter)
+        x = alphabet.index(message[i])
+        y = (x - k) % m
+        code += alphabet[y]
+
+    return code
+
+def KeyByCipertextVigenereEncode(alphabet, message, key):
+    m = len(alphabet)
+
+    code = ''
+    for i in range(len(message)):
+        kLetter = key[i] if len(key) > i else code[i-len(key)]
         k = alphabet.index(kLetter)
         x = alphabet.index(message[i])
         y = (x + k) % m
         code += alphabet[y]
 
     return code
+
+def KeyByCipertextVigenereDecode(alphabet, message, key):
+    delta = len(message) - len(key)
+    newKey = key + message[:delta]
+    invertedKey = _invertKey(alphabet, newKey)
+
+    return VigenereEncode(alphabet, message, invertedKey)
