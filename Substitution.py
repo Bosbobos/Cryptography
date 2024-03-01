@@ -64,3 +64,41 @@ def AffineRecDecode(alphabet, message, keyA1, keyA2, keyB1, keyB2):
         code += alphabet[x]
 
     return code
+
+def Vigenere(alphabet, message, key):
+    m = len(alphabet)
+
+    code = ''
+    for i in range(len(message)):
+        x = alphabet.index(message[i])
+        k = alphabet.index(key[i])
+        y = (x + k) % m
+        code += alphabet[y]
+
+    return code
+
+def RepeatKeyVigenere(alphabet, message, key):
+    n = int(len(message) / len(key)) + (len(message) % len(key) > 0) # ceil without importing math
+    repeated = key * n
+    newKey = repeated[:len(message)]
+
+    return Vigenere(alphabet, message, newKey)
+
+def KeyByTextVigenere(alphabet, message, key):
+    delta = len(message) - len(key)
+    newKey = key + message[:delta]
+
+    return Vigenere(alphabet, message, newKey)
+
+def KeyByCipertextVigenere(alphabet, message, key):
+    m = len(alphabet)
+
+    code = ''
+    for i in range(len(message)):
+        kLetter = key[i] if len(key) > i else code[i-1]
+        k = alphabet.index(kLetter)
+        x = alphabet.index(message[i])
+        y = (x + k) % m
+        code += alphabet[y]
+
+    return code
