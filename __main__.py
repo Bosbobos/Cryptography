@@ -42,6 +42,12 @@ msg = '''Please choose the operation:
 9: Hill decode
 10: Recurrent Hill encode
 11: Recurrent Hill decode
+12: Vigenere Repeat Key encode
+13: Vigenere Repeat Key decode
+14: Vigenere Plaintext Key encode
+15: Vigenere Plaintext Key decode
+16: Vigenere Ciphertext Key encode
+17: Vigenere Ciphertext Key decode
 '''
 
 
@@ -94,6 +100,26 @@ if __name__ == '__main__':
                 if not Validator.ValidateMatrixesDimensions(key1, key2):
                     raise Exception('Key\'s dimensions should be the same')                
                 print(Hill.RecHillDecode(alphabet, val, key1, key2))
+            case 12:
+                key = input('Key: ')
+                print(Substitution.RepeatKeyVigenereEncode(alphabet, val, key))
+            case 13:
+                key = input('Key: ')
+                print(Substitution.RepeatKeyVigenereDecode(alphabet, val, key))
+            case 14:
+                key = input('Key: ')
+                print(Substitution.KeyByTextVigenereEncode(alphabet, val, key))
+            case 15:
+                key = input('Key: ')
+                print(Substitution.KeyByTextVigenereDecode(alphabet, val, key))
+            case 16:
+                key = input('Key: ')
+                print(Substitution.KeyByCipertextVigenereEncode(alphabet, val, key))
+            case 17:
+                key = input('Key: ')
+                print(Substitution.KeyByCipertextVigenereDecode(alphabet, val, key))
+            case _:
+                raise Exception("Unknown command")
 
         message = input('Please enter the message: ')
         val = Validator.Validate(message, alphabet)
